@@ -63,39 +63,37 @@ public class Game {
         int playerOneScore = 0;
         int playerTwoScore = 0;
 
-
         while (playing) {
             int y = 0;
             int x = 0;
 
             boolean playerOneTurn = true;
             boolean playerTwoTurn = true;
-            boolean doneY = false;
-            boolean doneX = false;
+            boolean yCord = false;
+            boolean xCord = false;
 
-            if (playerOneScore == 2) {
+            if (playerOneScore == 17) {
                 System.out.println("Game over, Winner is " + player1.getName());
                 playing = false;
                 break;
-            } else if (playerTwoScore == 2) {
+            } else if (playerTwoScore == 17) {
                 System.out.println("Game over, Winner is " + player2.getName());
                 playing = false;
                 break;
             }
-
 
             while (playerOneTurn) {
                 y = 0;
                 x = 0;
                 printMap(player2Map, true);
                 System.out.println(player1.getName() + " THIS IS P1  's move, please enter Y coordinate: ");
-                while (!doneY) {
+                while (!yCord) {
                     String input = scanner.nextLine();
                     try {
                         y = Integer.parseInt(input);
                         try {
                             if (y >= 0 && y <= 9) {
-                                doneY = true;
+                                yCord = true;
                             } else {
                                 System.out.println("The number needs to be between 0 - 9!");
                             }
@@ -107,13 +105,13 @@ public class Game {
                 }
 
                 System.out.println("Enter X coordinate: ");
-                while (!doneX) {
+                while (!xCord) {
                     String input = scanner.nextLine();
                     try {
                         x = Integer.parseInt(input);
                         try {
                             if (x >= 0 && x <= 9) {
-                                doneX = true;
+                                xCord = true;
                             } else {
                                 System.out.println("The number needs to be between 0 - 9!");
                             }
@@ -133,8 +131,8 @@ public class Game {
                 } else if (player2Map[y][x] == 'X' || player2Map[y][x] == 'O') {
                     System.out.println("you have already bombed this area please choose another spot.");
                     System.out.println("_-_-_-_-_-_-_-_-_-_");
-                    doneY = false;
-                    doneX = false;
+                    yCord = false;
+                    xCord = false;
                 } else {
                     player2Map[y][x] = 'O';
                     System.out.println("MISS");
@@ -144,21 +142,21 @@ public class Game {
             }
 
             while (playerTwoTurn) {
-                doneY = false;
-                doneX = false;
+                yCord = false;
+                xCord = false;
                 y = 0;
                 x = 0;
                 System.out.println(player2.getName() + "'s move");
                 printMap(player1Map, true);
                 System.out.println(" please enter Y coordinate: ");
 
-                while (!doneY) {
+                while (!yCord) {
                     String input = scanner.nextLine();
                     try {
                         y = Integer.parseInt(input);
                         try {
                             if (y >= 0 && y <= 9) {
-                                doneY = true;
+                                yCord = true;
                             } else {
                                 System.out.println("The number needs to be between 0 - 9!");
                             }
@@ -171,13 +169,13 @@ public class Game {
 
                 System.out.println("Enter X coordinate: ");
 
-                while (!doneX) {
+                while (!xCord) {
                     String input = scanner.nextLine();
                     try {
                         x = Integer.parseInt(input);
                         try {
                             if (x >= 0 && x <= 9) {
-                                doneX = true;
+                                xCord = true;
                             } else {
                                 System.out.println("The number needs to be between 0 - 9!");
                             }
@@ -197,8 +195,8 @@ public class Game {
                 } else if (player1Map[y][x] == 'X' || player1Map[y][x] == 'O') {
                     System.out.println("you have already bombed this area please choose another spot.");
                     System.out.println("_-_-_-_-_-_-_-_-_-_");
-                    doneY = false;
-                    doneX = false;
+                    yCord = false;
+                    xCord = false;
                 } else {
                     player1Map[y][x] = 'O';
                     System.out.println("MISS");
@@ -245,28 +243,27 @@ public class Game {
         //ships Carrier 5, Battleship 4, Destroyer 3, Submarine 3, Patrol boat 2
         int y = 0;
         int x = 0;
-        boolean possbile = false;
+        boolean placementPossible = false;
         boolean redo = true;
-        //,3,3,4,5
-        int[] boats = {2};
+        //2,3,3,4,5
+        int[] boats = {2,3,3,4,5};
 
         while (redo) {
             System.out.println(player.getName() + " Start placing your fleet!");
             for (int i = 0; i < boats.length; i++) {
                 int boatLength = boats[i];
 
-
                 System.out.println("The ship to place is " + boats[i] + " spaces long \n First enter the y position for your ship: ");
-                boolean doneY = false;
-                boolean doneX = false;
+                boolean yCord = false;
+                boolean xCord = false;
 
-                while (!doneY) {
+                while (!yCord) {
                     String input = scanner.nextLine();
                     try {
                         y = Integer.parseInt(input);
                         try {
                             if (y >= 0 && y <= 9) {
-                                doneY = true;
+                                yCord = true;
                             } else {
                                 System.out.println("The number needs to be between 0 - 9!");
                             }
@@ -278,13 +275,13 @@ public class Game {
                 }
 
                 System.out.println("Now enter the x position for your ship: ");
-                while (!doneX) {
+                while (!xCord) {
                     String input = scanner.nextLine();
                     try {
                         x = Integer.parseInt(input);
                         try {
                             if (x >= 0 && x <= 9) {
-                                doneX = true;
+                                xCord = true;
                             } else {
                                 System.out.println("The number needs to be between 0 - 9!");
                             }
@@ -294,8 +291,8 @@ public class Game {
                         System.out.println("Please enter a number!");
                     }
                 }
-                possbile = false;
-                while (!possbile) {
+                placementPossible = false;
+                while (!placementPossible) {
                     System.out.println("Now enter in witch direction you want to place your ship from your start position, by typing \"up\", \"right\", \"down\", \"left\" or \"redo\" to choose new coordinates: ");
                     String direction = scanner.nextLine();
 
@@ -303,18 +300,15 @@ public class Game {
                     //temp namn
                     if(direction.trim().equalsIgnoreCase("redo")){
                         redo = true;
-                        possbile = true;
+                        placementPossible = true;
                     }else {
                         redo = false;
-                        possbile = BoatPlacementPossible(map, yx, direction, boatLength);
+                        placementPossible = BoatPlacementPossible(map, yx, direction, boatLength);
                     }
-
                 }
             }
         }
     }
-
-
 
         public boolean BoatPlacementPossible(char[][] map, int[] yx, String direction, int boatLength) {
 
@@ -323,13 +317,11 @@ public class Game {
             char mapPosValue = map[newY][newX];
             char w = 'W';
 
-            switch (direction) {
+            switch (direction.trim().toLowerCase()) {
                 case "up":
-                    System.out.println("up");
                     if(yx[0] - boatLength >= 0) {
                         //place boat
                         for (int i = 0; i < boatLength; i++) {
-
                             if(mapPosValue != w){
                                 return false;
                             }
@@ -342,13 +334,9 @@ public class Game {
                     else {
                         return false;
                     }
-
                 case "right":
-                    System.out.println("right");
                     if(yx[1] + boatLength <= 9) {
-
                         for (int i = 0; i < boatLength; i++) {
-
                             if(mapPosValue != w){
                                 return false;
                             }
@@ -362,13 +350,9 @@ public class Game {
                         System.out.println("We are in last else state");
                         return false;
                     }
-
                 case "down":
-                    System.out.println("down");
                     if(yx[0] + boatLength <= 9) {
-
                         for (int i = 0; i < boatLength; i++) {
-
                             if(mapPosValue != w){
                                 return false;
                             }
@@ -383,9 +367,7 @@ public class Game {
                     }
 
                 case "left":
-                    System.out.println("left");
                     if(yx[1] - boatLength >= 0) {
-
                         for (int i = 0; i < boatLength; i++) {
                             if(mapPosValue != w){
                                 return false;
@@ -397,15 +379,11 @@ public class Game {
                         return true;
                     }
                     else {
-
                         return false;
                     }
             }
-
         return false;
         }
-
-
 
     }
 
