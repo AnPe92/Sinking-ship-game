@@ -2,15 +2,14 @@ import java.util.*;
 
 public class Game {
 
-    List<Ship> ships = List.of(new Ship("Abba", 2, 1), new Ship("Bebba", 3,2 ));
+    //Things to do, break out input validator to its on method.
+
+    //Running the game loop.
     Scanner scanner = new Scanner(System.in);
-    void game(boolean running, GameBoard gameBoard){
-
-
-
+    void game(boolean running){
         //Game menu
         while(running){
-            System.out.println("Welcome to Anton's sinking ship game! \n Make a choice \n [1] play a new game vs ai \n [2] play a game vs a friend (local coop) \n [3] Scorboard \n[4] exit program");
+            System.out.println("Welcome to Anton's sinking ship game! \n Make a choice \n [1] Play a new game vs ai \n [2] Play a game vs a friend (local coop) \n [3] Scorboard \n [4] Exit program");
             int userInput = scanner.nextInt();
             switch (userInput){
                 case    1:
@@ -26,9 +25,11 @@ public class Game {
             }
         }
     }
+
+    //Start up loocalcoop game session
     private void localCoop() {
 
-        //Initialize player maps
+        //Initialize player maps and "drawing" them with W
         char[][] player1Map = new char[10][10];
         char[][] player2Map = new char[10][10];
 
@@ -39,33 +40,37 @@ public class Game {
             }
         }
 
+        //Getting user1 to setup his gameboard.
         System.out.println("Player one enter your name: ");
         scanner.nextLine();
-
         String playerName = scanner.nextLine().trim();
         Player player1 = new Player(playerName);
         placeShipsLocalCoop(player1, player1Map);
 
+        //setting up user2
         System.out.println("Player two enter your name: ");
         playerName = scanner.nextLine().trim();
         Player player2 = new Player(playerName);
         placeShipsLocalCoop(player2, player2Map);
 
+        //Starting the game session
         startGame(player1, player2, player1Map, player2Map);
     }
 
     private void startGame(Player player1, Player player2, char[][] player1Map, char[][] player2Map) {
-
         boolean playing = true;
         int playerOneScore =0;
         int playerTwoScore =0;
-        int y = 0;
+        int y = 0 ;
         int x = 0;
 
         while(playing) {
 
             boolean playerOneTurn = true;
             boolean playerTwoTurn = true;
+            boolean doneY = false;
+            boolean doneX = false;
+
             if (playerOneScore == 17) {
                 System.out.println("Game over, Winner is " + player1.getName());
                 playing = false;
@@ -80,9 +85,41 @@ public class Game {
             while(playerOneTurn) {
                 printMap(player2Map, true);
                 System.out.println(player1.getName() + "'s move, please enter Y coordinate: ");
-                y = scanner.nextInt();
+                while(!doneY)
+                {
+                    String input = scanner.nextLine();
+                    try{
+                        y = Integer.parseInt(input);
+                        try{
+                            if (y >=0 && y <= 9){
+                                doneY = true;
+                            } else {
+                                System.out.println("The number needs to be between 0 - 9!");
+                            }
+                        }catch (Exception ignored) {}
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                }
+
                 System.out.println("Enter X coordinate: ");
-                x = scanner.nextInt();
+                while(!doneX)
+                {
+                    String input = scanner.nextLine();
+                    try{
+                        x = Integer.parseInt(input);
+                        try{
+                            if (x >=0 && x <= 9){
+                                doneX = true;
+                            } else {
+                                System.out.println("The number needs to be between 0 - 9!");
+                            }
+                        }catch (Exception ignored) {}
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                }
+
                 if (player2Map[y][x] == 'S') {
                     System.out.println("HIT");
                     playerOneScore++;
@@ -98,18 +135,49 @@ public class Game {
             }
 
             while(playerTwoTurn) {
+                doneY = false;
+                doneX = false;
                 System.out.println(player2.getName() + "'s move");
                 printMap(player1Map, true);
                 System.out.println( " please enter Y coordinate: ");
-                try{
-                    y = scanner.nextInt();
-                } catch (InputMismatchException e){
-                    System.err.println("Please use numbers!");
-                    scanner.nextLine();
+
+
+                while(!doneY)
+                {
+                    String input = scanner.nextLine();
+                    try{
+                        y = Integer.parseInt(input);
+                        try{
+                            if (y >= 0 && y <= 9){
+                                doneY = true;
+                            } else {
+                                System.out.println("The number needs to be between 0 - 9!");
+                            }
+                        }catch (Exception ignored) {}
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
                 }
 
                 System.out.println("Enter X coordinate: ");
-                x = scanner.nextInt();
+
+                while(!doneX)
+                {
+                    String input = scanner.nextLine();
+                    try{
+                        x = Integer.parseInt(input);
+                        try{
+                            if (x >= 0 && x <= 9){
+                                doneX = true;
+                            } else {
+                                System.out.println("The number needs to be between 0 - 9!");
+                            }
+                        }catch (Exception ignored) {}
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number!");
+                    }
+                }
+
                 if (player1Map[y][x] == 'S') {
                     playerTwoScore++;
                     player1Map[y][x] = 'X';
@@ -124,31 +192,31 @@ public class Game {
         }
     }
 
+    //Drawing a map for users, can see ships when placing your ships, cant see them when bombing opponents map.
     private void printMap(char [][] map, boolean playing) {
 
-        String mapBuilder = "  0 1 2 3 4 5 6 7 8 9\n";
+        StringBuilder mapBuilder = new StringBuilder("  0 1 2 3 4 5 6 7 8 9\n");
         if(playing) {
-
             for (int i = 0; i < map.length; i++) {
-                mapBuilder = mapBuilder + i;
+                mapBuilder.append(i);
                 for (int j = 0; j < map.length; j++) {
                     if (map[i][j] == 'S') {
-                        mapBuilder = mapBuilder + " " + "W";
+                        mapBuilder.append(" ").append("W");
                     } else {
-                        mapBuilder = mapBuilder + " " + map[i][j];
+                        mapBuilder.append(" ").append(map[i][j]);
                     }
                     if (j == 9) {
-                        mapBuilder = mapBuilder + "\n";
+                        mapBuilder.append("\n");
                     }
                 }
             }
         } else {
             for (int i = 0; i < map.length; i++) {
-                mapBuilder = mapBuilder + i;
+                mapBuilder.append(i);
                 for (int j = 0; j < map.length; j++) {
-                   mapBuilder = mapBuilder + " " + map[i][j];
+                   mapBuilder.append(" ").append(map[i][j]);
                     if (j == 9) {
-                        mapBuilder = mapBuilder + "\n";
+                        mapBuilder.append("\n");
                     }
                 }
             }
@@ -166,49 +234,45 @@ public class Game {
             System.out.println(player.getName() + " Start placing your fleet!");
             for (int i = 0; i < boats.length; i++) {
                 int boatLength = boats[i];
-                possbile = false;
 
                 while(!possbile) {
                     System.out.println("The ship to place is " + boats[i] + " spaces long \n First enter the y position for your ship: ");
                     boolean doneY = false;
                     boolean doneX = false;
+
                     while(!doneY)
                     {
+                      String input = scanner.nextLine();
+                      try{
+                          y = Integer.parseInt(input);
+                          try{
+                              if (y >=0 && y <= 9){
+                                  doneY = true;
+                              } else {
+                                  System.out.println("The number needs to be between 0 - 9!");
+                              }
+                          }catch (Exception ignored) {}
+                      } catch (NumberFormatException e) {
+                          System.out.println("Please enter a number!");
+                      }
+                    }
 
-                        String input = scanner.nextLine();
-                        try
-                        {
-                            y = Integer.parseInt(input);
-                            doneY = true;
-                        }
-                        catch( Exception e )
-                        {
-                            System.out.println("Please enter a number!");
-                        }
-                    }
-                    //y = scanner.nextInt();
-                    while (y > 9 || y < 0) {
-                        System.out.println("Invalid input please input your y position again: ");
-                        y = scanner.nextInt();
-                    }
                     System.out.println("Now enter the x position for your ship: ");
                     while(!doneX)
                     {
                         String input = scanner.nextLine();
-                        try
-                        {
+                        try{
                             x = Integer.parseInt(input);
-                            doneX = true;
-                        }
-                        catch( Exception e )
-                        {
+                            try{
+                                if (x >= 0 && x <= 9){
+                                    doneX = true;
+                                } else {
+                                    System.out.println("The number needs to be between 0 - 9!");
+                                }
+                            }catch (Exception ignored) {}
+                        } catch (NumberFormatException e) {
                             System.out.println("Please enter a number!");
                         }
-
-                    }
-                    while (x > 9 || x < 0) {
-                        System.out.println("Invalid input please input your x position again: ");
-                        x = scanner.nextInt();
                     }
 
                     System.out.println("Now enter in witch direction you want to place your ship from your start position, by typing \"up\", \"right\", \"down\" or \"left\": ");

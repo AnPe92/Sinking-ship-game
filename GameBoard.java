@@ -6,6 +6,8 @@ import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
+//Idea about using hashmap instead of Char 2d array
+//Would only use 1 map for the game instead of the 2 its using right now.
 public class GameBoard {
 
     private  HashMap <int[], Tile> gameBoard = new HashMap <>();
