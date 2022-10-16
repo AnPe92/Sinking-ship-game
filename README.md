@@ -5,7 +5,7 @@ To play run main.
 
 Things to do:
 
-breakout input validation to its own method.
+breakout input validation to its own method.\n
 Implement computer ai, something simple with Math random until valid inputs on placing ships and same for the bombing phase.
 Implement score keeping and local db for persistent score keeping.
 Look into some library for implementing GUI.
