@@ -297,11 +297,14 @@ public class Game {
                     String direction = scanner.nextLine();
 
                     int[] yx = {y, x};
-                    //temp namn
-                    if(direction.trim().equalsIgnoreCase("redo")){
+                    char mapValue =  map[y][x];
+
+                    if(direction.trim().equalsIgnoreCase("redo") || mapValue == 'S'){
+                        i--;
                         redo = true;
                         placementPossible = true;
-                    }else {
+                    }
+                    else {
                         redo = false;
                         placementPossible = BoatPlacementPossible(map, yx, direction, boatLength);
                     }
@@ -310,12 +313,19 @@ public class Game {
         }
     }
 
+
         public boolean BoatPlacementPossible(char[][] map, int[] yx, String direction, int boatLength) {
 
             int newY = yx[0];
             int newX = yx[1];
             char mapPosValue = map[newY][newX];
             char w = 'W';
+
+            System.out.println(mapPosValue + " map pos value");
+
+            if(mapPosValue == 'S'){
+                return false;
+            }
 
             switch (direction.trim().toLowerCase()) {
                 case "up":
@@ -347,7 +357,6 @@ public class Game {
                         return true;
                     }
                     else {
-                        System.out.println("We are in last else state");
                         return false;
                     }
                 case "down":
